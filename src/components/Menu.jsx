@@ -4,7 +4,7 @@ export const Menu = (props) => {
   return (
     <>
       <button
-        className="z-20 fixed top-12 right-12 p-3 bg-indigo-600 w-11 h-11 rounded-md"
+        className="z-20 fixed top-4 right-4 md:top-12 md:right-12 p-3 bg-indigo-600 w-11 h-11 rounded-md"
         onClick={() => setMenuOpened(!menuOpened)}
       >
         <div
@@ -26,7 +26,7 @@ export const Menu = (props) => {
 
       <div
         className={`z-10 fixed top-0 right-0 bottom-0 bg-white transition-all overflow-hidden flex flex-col ${
-          menuOpened ? "w-80 " : "w-0"
+          menuOpened ? "w-full md:w-80 " : "w-0"
         }`}
       >
         <div>

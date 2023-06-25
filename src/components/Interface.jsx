@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { currentProjectAtom, projects } from "./Projects";
+import { useForm, ValidationError } from '@formspree/react';
+
 const Section = (props) => {
-  const { children } = props;
+  const { children,mobileTop } = props;
 
   return (
     <motion.section
@@ -15,7 +17,7 @@ const Section = (props) => {
           delay: 0.6,
         },
       }}
-      className="h-screen w-screen p-8 max-w-screen-2xl mx-auto flex  flex-col  items-start justify-center"
+      className={`h-screen w-screen p-8 max-w-screen-2xl mx-auto flex  flex-col  items-start  ${mobileTop ? 'justify-start md:justify-center' : 'justify-center'}`}
     >
       {children}
     </motion.section>
@@ -26,8 +28,8 @@ const AboutSection = (props) => {
     const {setSection} = props;
 
   return (
-    <Section>
-      <h1 className="text-6xl font-extrabold leading-snug">
+    <Section mobileTop>
+      <h1 className="text-4xl md:text-6xl font-extrabold leading-snug mt-8 md:mt-0">
         Hi , I'm <br />
         <span className="bg-white px-1 italic">Kenan Boyukkishiyev</span>{" "}
       </h1>
@@ -56,7 +58,7 @@ const AboutSection = (props) => {
           delay: 2.5,
         }}
         onClick={()=>setSection(3 )}
-        className={`bg-indigo-600 text-white py-4 px-8 rounded-lg font-bold text-lg mt-16`}
+        className={`bg-indigo-600 text-white py-4 px-8 rounded-lg font-bold text-lg mt-4 md:mt-16`}
       >
         Contact me
       </motion.button>
@@ -115,12 +117,12 @@ const languages = [
 const SkillsSection = () => {
   return (
     <Section>
-      <motion.div whileInView={"visible"}>
-        <h2 className="text-5xl font-bold text-white">Skills</h2>
+      <motion.div className="w-full" whileInView={"visible"}>
+        <h2 className="text-3xl  md:text-5xl font-bold text-white">Skills</h2>
 
         <div className="mt-8 space-y-4 ">
           {skills.map((skill, index) => (
-            <div className="w-64" key={index}>
+            <div className="w-full md:w-64" key={index}>
               <motion.h3
                 initial={{ opacity: 0 }}
                 variants={{
@@ -132,7 +134,7 @@ const SkillsSection = () => {
                     },
                   },
                 }}
-                className="text-xl font-bold text-gray-100"
+                className="text-lg md:text-xl font-bold text-gray-100"
               >
                 {skill.title}
               </motion.h3>
@@ -161,7 +163,7 @@ const SkillsSection = () => {
         </div>
 
         <div>
-          <h2 className="text-5xl font-bold mt-10 text-white">Languages</h2>
+          <h2 className="text-3xl  md:text-5xl font-bold mt-10 text-white">Languages</h2>
           <div className="mt-8 space-y-4">
             {languages.map((language, index) => (
               <div className="w-64" key={index}>
@@ -176,7 +178,7 @@ const SkillsSection = () => {
                       },
                     },
                   }}
-                  className="text-xl font-bold text-gray-100"
+                  className="text-lg md:text-xl font-bold text-gray-100"
                 >
                   {language.title}
                 </motion.h3>
@@ -223,19 +225,29 @@ return(
     <Section>
         <div className="flex w-full h-full gap-8 items-center justify-center">
             <button className="hover:text-indigo-600 transition-colors" onClick={previousProject}>  ← Previous </button>
-            <h2 className="text-5xl font-bold">Projects</h2>
+            <h2 className="text-3xl  md:text-5xl font-bold">Projects</h2>
             <button className="hover:text-indigo-600 transition-colors" onClick={nextProject}>Next →</button>
 
         </div>
     </Section>
 )
 }
+
+
+
 const ContactSection = () => {
+  const [state, handleSubmit] = useForm("maygwqew");
+
   return (
     <Section>
-      <h2 className="text-5xl font-bold">Contact me</h2>
-      <div className="mt-8 p-8 rounded-md bg-white w-96 max-w-full">
-        <form>
+      <h2 className="text-3xl  md:text-5xl font-bold">Contact me</h2>
+      <div className="mt-8 p-8 rounded-md bg-white bg-opacity-50 w-96 max-w-full">
+           { state.succeeded ? (
+                <p className="text-green-500"> thenks for your message</p>
+            ) : (
+
+        <form onSubmit={handleSubmit}>
+
           <label htmlFor="name" className="font-medium text-gray-900 block mb-1">
             Name
           </label>
@@ -257,6 +269,13 @@ const ContactSection = () => {
             id="email"
             className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 p-3"
           />
+           <ValidationError 
+                  className='mt-1 text-red-500'
+
+        prefix="Email" 
+        field="email"
+        errors={state.errors}
+      />
           <label
             htmlFor="email"
             className="font-medium text-gray-900 block mb-1 mt-8"
@@ -268,10 +287,17 @@ const ContactSection = () => {
             id="message"
             className="h-32 block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 p-3"
           />
-          <button className="bg-indigo-600 text-white py-4 px-8 rounded-lg font-bold text-lg mt-16 ">
+
+<ValidationError 
+       className='mt-1 text-red-500'
+        errors={state.errors}
+      />
+          <button type="submit" disabled={state.submitting} className="bg-indigo-600 text-white py-4 px-8 rounded-lg font-bold text-lg mt-16 ">
             Submit
           </button>
         </form>
+        )}
+
       </div>
     </Section>
   );

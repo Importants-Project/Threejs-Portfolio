@@ -2,23 +2,26 @@ import { Canvas } from "@react-three/fiber";
 import { Experience } from "./components/Experience";
 import { Scroll, ScrollControls } from "@react-three/drei";
 import { Interface } from "./components/Interface";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { ScrollManager } from "./components/ScrollManager";
 import { Menu } from "./components/Menu";
 import { MotionConfig } from "framer-motion";
 import { Leva } from "leva";
 import {frameMotionConfig} from './config'
 import { Cursor } from "./components/Cursor";
+import { LoadingScreen } from "./components/LoadingScreen";
 function App() {
 
-    const [section,setSection] = useState(0)
-    const [menuOpened,setMenuOpened] = useState(false)
+    const [section,setSection] = useState(0);
+    const [menuOpened,setMenuOpened] = useState(false);
+    const [started,setStarted] = useState(false);
 
     useEffect(() => {
         setMenuOpened(false)
     },[section])
   return (
     <>
+    <LoadingScreen started={started} setStarted={setStarted}/>
     <MotionConfig transition={{
        ...frameMotionConfig
     }}>
@@ -29,11 +32,17 @@ function App() {
             <ScrollManager section={section} onSectionChange={setSection} />
 
             <Scroll>
+                <Suspense>
+{started && (
             <Experience menuOpened={menuOpened}  section={section}/>
+
+)}
+            </Suspense>
+
             </Scroll>
 
           <Scroll html>
-            <Interface setSection={setSection}/>
+          {started && (  <Interface setSection={setSection}/> )}
           </Scroll>
         </ScrollControls>
       </Canvas>
