@@ -30,8 +30,8 @@ const AboutSection = (props) => {
   return (
     <Section mobileTop>
       <h1 className="text-4xl md:text-6xl font-extrabold leading-snug mt-8 md:mt-0">
-        Hi , I'm <br />
-        <span className="bg-white px-1 italic">Kenan Boyukkishiyev</span>{" "}
+        Hi , I'm <br /> <br />
+        <span className="bg-white px-1  italic">Kenan Boyukkishiyev</span>{" "}
       </h1>
       <motion.p
         initial={{ opacity: 0, y: 25 }}
@@ -43,7 +43,7 @@ const AboutSection = (props) => {
           duration: 1,
           delay: 1.5,
         }}
-        className="text-lg text-gray-600 mt-4"
+        className="text-lg text-white mt-4"
       >
         I Front-End Developer and I make good websites
       </motion.p>
